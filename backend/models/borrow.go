@@ -7,11 +7,12 @@ import (
 )
 
 type Borrow struct {
-	ID        uuid.UUID `gorm:"type:uuid;primary_key"`
-	AccountID uuid.UUID `gorm:"type:uuid;not null"`
-	Account   Account   `gorm:"constraint:OnDelete:CASCADE"`
-	BookID    uuid.UUID `gorm:"type:uuid;not null"`
-	Book      Book      `gorm:"constraint:OnDelete:CASCADE"`
-	CreatedAt time.Time `gorm:"not null;default:CURRENT_TIMESTAMP"`
-	UpdatedAt time.Time
+	ID        uuid.UUID `gorm:"type:uuid;primary_key"              json:"id"`
+	AccountID uuid.UUID `gorm:"type:uuid;not null"                 json:"-"`
+	Account   Account   `gorm:"constraint:OnDelete:CASCADE"        json:"account"`
+	BookID    uuid.UUID `gorm:"type:uuid;not null"                 json:"-"`
+	Book      Book      `gorm:"constraint:OnDelete:CASCADE"        json:"book"`
+	IsSended  bool      `gorm:"not null"                           json:"-"`
+	CreatedAt time.Time `gorm:"not null;default:CURRENT_TIMESTAMP" json:"-"`
+	UpdatedAt time.Time `                                          json:"-"`
 }

@@ -1,4 +1,4 @@
-package main
+package seeder
 
 import (
 	"log"
@@ -7,13 +7,14 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/unedtamps/PBKKD_EAS/backend/models"
+	"github.com/unedtamps/PBKKD_EAS/backend/util"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 )
 
 var db *gorm.DB
 
-func main() {
+func SeedDb() {
 	var err error
 	db, err = gorm.Open(sqlite.Open("database/data.db"), &gorm.Config{})
 	if err != nil {
@@ -24,24 +25,28 @@ func main() {
 }
 
 func Accout() {
+	passowrd, _ := util.GenereateHasedPassword("password")
 	account := []models.Account{
 		models.Account{
 			ID:       uuid.New(),
 			Username: "unedo",
 			Email:    "unedo@gmail.com",
 			Role:     "user",
+			Password: passowrd,
 		},
 		models.Account{
 			ID:       uuid.New(),
 			Username: "viery",
 			Email:    "viery@gmail.com",
 			Role:     "user",
+			Password: passowrd,
 		},
 		models.Account{
 			ID:       uuid.New(),
 			Username: "admin",
-			Email:    "viery@gmail.com",
+			Email:    "admin@gmail.com",
 			Role:     "admin",
+			Password: passowrd,
 		},
 	}
 	db.Create(account)
@@ -67,21 +72,12 @@ func Books() {
 				Picture_URL: generateRandomURL("http://library.com/picture/"),
 				PDF_url:     generateRandomURL("http://library.com/pdf/"),
 				Synopsis:    bookSysnopsis[book],
+				GenreID:     mapBookGenres[book],
 			})
 			bookIDs[book] = idBook
 		}
 	}
 	db.Create(books)
-	// create bookGenres
-	var genreBook []models.BookGenre
-	for n, v := range bookIDs {
-		genreBook = append(genreBook, models.BookGenre{
-			ID:      uuid.New(),
-			BookID:  v,
-			GenreID: mapBookGenres[n],
-		})
-	}
-	db.Create(genreBook)
 }
 
 func generateRandomURL(base string) string {
