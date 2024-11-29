@@ -4,7 +4,7 @@
 
 ### 1. Clone this repository
 ```bash 
- git clone https://github.com/unedtamps/PBKK_GolangFP.git
+ git clone https://github.com/unedtamps/PBKK_GolangFP.git && cd PBKK_GolangFP/backend
 ```
 
 ### 2. Install the dependencies
