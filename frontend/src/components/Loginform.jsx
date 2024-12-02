@@ -14,10 +14,11 @@ export default function LoginForm() {
 
     try {
       const response = await login(email, password);
-      const { token, role } = response.data;
+      const { token, role, username } = response.data;
 
       localStorage.setItem("token", token);
       localStorage.setItem("role", role);
+      localStorage.setItem("username", username);
 
       if (role === "admin") {
         navigate("/dashboard");

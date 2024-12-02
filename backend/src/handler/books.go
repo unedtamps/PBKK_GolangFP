@@ -52,16 +52,6 @@ func GetAllBooks(c *gin.Context) {
 	util.ResponseJson(c, http.StatusOK, "Success get books", books)
 }
 
-func GetLatestBooks(c *gin.Context) {
-	books := []models.Book{}
-	result := config.DB.Preload("Author").Preload("Genre").Order("id DESC").Limit(5).Find(&books)
-	if result.Error != nil {
-		util.ResponseJson(c, http.StatusInternalServerError, result.Error.Error(), nil)
-		c.Abort()
-		return
-	}
-	util.ResponseJson(c, http.StatusOK, "Success get latest books", books)
-}
 
 func CreateBook(c *gin.Context) {
 	request := c.Value("request").(dto.CreateBook)

@@ -3,14 +3,15 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 export default function UserDashboard() {
-  const [latestBooks, setLatestBooks] = useState([]);
   const [allBooks, setAllBooks] = useState([]);
   const [showAllBooks, setShowAllBooks] = useState(false);
   const navigate = useNavigate();
+  const username = localStorage.getItem('username');
 
   useEffect(() => {
     const token = localStorage.getItem('token');
     const role = localStorage.getItem('role');
+    
 
     if (!token || role !== 'user') {
       navigate(role === 'user' ? '/dashboarduser' : '/login');
@@ -31,19 +32,33 @@ export default function UserDashboard() {
 
   const borrowBook = async (bookId) => {
     try {
-      await axios.post(
-        "http://localhost:8081/borrow/{ bookId }",
-        { book_id: bookId },
+      const response = await axios.post(
+        `http://localhost:8081/borrow/${bookId}`,  // bookId di URL
         {
-          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+          BookID: bookId,  // Kirimkan bookId di body
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,  // Kirimkan token di header
+          },
         }
       );
-      alert("Book borrowed successfully. Check your email for the PDF link.");
+      
+      if (response.status === 200) {
+        alert("Book borrowed successfully. Check your email for the PDF link.");
+      }
     } catch (error) {
       console.error("Failed to borrow book", error);
-      alert("Failed to borrow book");
+      
+      if (error.response) {
+        console.error("Error response data:", error.response.data);
+        alert("Error: " + error.response.data.message || "Failed to borrow book");
+      } else {
+        alert("An unexpected error occurred.");
+      }
     }
   };
+    
 
   const renderBooks = (books) => {
     return books.map((book) => (
@@ -66,10 +81,7 @@ export default function UserDashboard() {
   return (
     <div className="container mx-auto p-4">
       <h1 className="text-3xl font-bold text-gray-800">Dashboard User</h1>
-      <h2 className="text-2xl font-semibold text-gray-800 mt-6">Buku Terbaru</h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
-        {renderBooks(latestBooks)}
-      </div>
+      <h2 className="text-2xl font-semibold text-gray-800 mt-6">Welcome, {username}</h2>
 
       {showAllBooks ? (
         <>

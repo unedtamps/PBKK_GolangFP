@@ -45,7 +45,6 @@ func StartServer() error {
 	)
 	r.GET("/book/authors", m.VerifiyJwtToken, handler.GetAllAuthor)
 	r.GET("/book/genres", m.VerifiyJwtToken, handler.GetAllGenre)
-	r.GET("/book/latest", m.VerifiyJwtToken, handler.GetLatestBooks)
 	r.POST(
 		"/book/create",
 		m.VerifiyJwtToken,
