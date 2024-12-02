@@ -4,7 +4,8 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom"
 import Login from './pages/Login'
 import Landing from './pages/Landing'
 import Register from './pages/Register'
-import Dashboard from './pages/Dashboard'
+import DashboardAdmin from './pages/DashboardAdmin'
+import DashboardUser from './pages/DashboardUser'
 
 const router = createBrowserRouter(
   [
@@ -22,7 +23,11 @@ const router = createBrowserRouter(
     },
     {
       path: "/dashboard",
-      element: <Dashboard/>
+      element: <DashboardAdmin/>
+    },
+    {
+      path: "/dashboarduser",
+      element: <DashboardUser/>
     },
   ]
 )

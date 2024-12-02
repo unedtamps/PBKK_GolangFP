@@ -3,23 +3,29 @@ import { useNavigate } from 'react-router-dom';
 import { login } from '../utils/login';
 
 export default function LoginForm() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError('');
+    setError("");
 
     try {
       const response = await login(email, password);
+      const { token, role } = response.data;
 
-      localStorage.setItem('token', response.data.token);
+      localStorage.setItem("token", token);
+      localStorage.setItem("role", role);
 
-      navigate('/dashboard');
+      if (role === "admin") {
+        navigate("/dashboard");
+      } else {
+        navigate("/dashboarduser");
+      }
     } catch (err) {
-      setError('Invalid email or password');
+      setError("Invalid email or password");
     }
   };
 

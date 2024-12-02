@@ -13,7 +13,13 @@ import (
 
 func StartServer() error {
 	r := gin.Default()
-	r.Use(cors.Default())
+	r.Use(cors.New(cors.Config{
+		AllowOrigins:     []string{"http://localhost:5173"},
+		AllowMethods:     []string{"GET", "POST", "PATCH", "DELETE", "OPTIONS"},
+		AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
+		ExposeHeaders:    []string{"Content-Length"},
+		AllowCredentials: true,
+	}))
 
 	r.GET("/account/id/:id", m.Validate[dto.GetByID](), handler.GetAccountById)
 	r.GET(
@@ -39,6 +45,7 @@ func StartServer() error {
 	)
 	r.GET("/book/authors", m.VerifiyJwtToken, handler.GetAllAuthor)
 	r.GET("/book/genres", m.VerifiyJwtToken, handler.GetAllGenre)
+	r.GET("/book/latest", m.VerifiyJwtToken, handler.GetLatestBooks)
 	r.POST(
 		"/book/create",
 		m.VerifiyJwtToken,

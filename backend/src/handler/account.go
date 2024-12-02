@@ -93,6 +93,7 @@ func LoginAccount(c *gin.Context) {
 		"id":       user.ID.String(),
 		"username": user.Username,
 		"email":    user.Email,
+		"role":     string(user.Role),
 	}
 
 	util.ResponseJson(c, http.StatusCreated, "Success login account", responseData)
