@@ -1,103 +1,42 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import Sidebar from "../components/Sidebar";
 
-export default function UserDashboard() {
-  const [allBooks, setAllBooks] = useState([]);
-  const [showAllBooks, setShowAllBooks] = useState(false);
+export default function DashboardUser() {
   const navigate = useNavigate();
-  const username = localStorage.getItem('username');
+  const username = localStorage.getItem("username");
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    const role = localStorage.getItem('role');
-    
+    const token = localStorage.getItem("token");
+    const role = localStorage.getItem("role");
 
-    if (!token || role !== 'user') {
-      navigate(role === 'user' ? '/dashboarduser' : '/login');
+    if (!token || role !== "user") {
+      navigate("/login");
     }
   }, [navigate]);
 
-  const fetchAllBooks = async () => {
-    try {
-      const response = await axios.get("http://localhost:8081/book/all", {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-      });
-      setAllBooks(response.data.data);
-      setShowAllBooks(true);
-    } catch (error) {
-      console.error("Failed to fetch all books", error);
-    }
-  };
-
-  const borrowBook = async (bookId) => {
-    try {
-      const response = await axios.post(
-        `http://localhost:8081/borrow/${bookId}`,  // bookId di URL
-        {
-          BookID: bookId,  // Kirimkan bookId di body
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,  // Kirimkan token di header
-          },
-        }
-      );
-      
-      if (response.status === 200) {
-        alert("Book borrowed successfully. Check your email for the PDF link.");
-      }
-    } catch (error) {
-      console.error("Failed to borrow book", error);
-      
-      if (error.response) {
-        console.error("Error response data:", error.response.data);
-        alert("Error: " + error.response.data.message || "Failed to borrow book");
-      } else {
-        alert("An unexpected error occurred.");
-      }
-    }
-  };
-    
-
-  const renderBooks = (books) => {
-    return books.map((book) => (
-      <div key={book.id} className="max-w-sm bg-white rounded-lg shadow-lg overflow-hidden">
-        <img src={book.picture_url} alt={book.name} className="w-full h-48 object-cover"/>
-        <div className="p-4">
-          <h5 className="text-lg font-semibold text-gray-900">{book.name}</h5>
-          <p className="text-sm text-gray-600 mt-2">{book.synopsis}</p>
-          <button
-            className="w-full mt-4 bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400"
-            onClick={() => borrowBook(book.id)}
-          >
-            Pinjam
-          </button>
-        </div>
-      </div>
-    ));
-  };
+  const menuItemsUser = [
+    { title: "Dashboard", link: "/dashboarduser", img: "/public/vite.svg" },
+    { title: "Daftar Buku", link: "/booklistuser", img: "/public/vite.svg" },
+    { title: "My Books", link: "/mybook", img: "/public/vite.svg" },
+  ];
 
   return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-3xl font-bold text-gray-800">Dashboard User</h1>
-      <h2 className="text-2xl font-semibold text-gray-800 mt-6">Welcome, {username}</h2>
+    <div className="flex min-h-screen bg-gray-100">
+      <Sidebar menuItems={menuItemsUser} />
 
-      {showAllBooks ? (
-        <>
-          <h2 className="text-2xl font-semibold text-gray-800 mt-12">Semua Buku</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
-            {renderBooks(allBooks)}
-          </div>
-        </>
-      ) : (
+      <div className="flex-1 pl-72 p-6">
+        <h2 className="text-3xl font-semibold text-black">
+          Welcome Back {username}!
+        </h2>
+
         <button
-          className="mt-6 px-6 py-3 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400"
-          onClick={fetchAllBooks}
+          className="mt-6 px-6 py-3 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400"
+          onClick={() => navigate("/booklistuser")}
         >
           View All
         </button>
-      )}
+      </div>
     </div>
   );
 }

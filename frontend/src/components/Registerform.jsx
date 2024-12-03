@@ -48,7 +48,7 @@ export default function RegisterForm() {
                 htmlFor="fullname"
                 className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
               >
-                Fullname
+                Name
               </label>
               <input
                 type="text"
@@ -65,7 +65,7 @@ export default function RegisterForm() {
                 htmlFor="email"
                 className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
               >
-                Your email
+                Email
               </label>
               <input
                 type="email"

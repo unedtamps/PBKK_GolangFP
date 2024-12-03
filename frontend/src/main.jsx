@@ -6,6 +6,8 @@ import Landing from './pages/Landing'
 import Register from './pages/Register'
 import DashboardAdmin from './pages/DashboardAdmin'
 import DashboardUser from './pages/DashboardUser'
+import BookListUser from './pages/BookListUser'
+import MyBookUser from './pages/MyBookUser'
 
 const router = createBrowserRouter(
   [
@@ -28,6 +30,14 @@ const router = createBrowserRouter(
     {
       path: "/dashboarduser",
       element: <DashboardUser/>
+    },
+    {
+      path: "/booklistuser",
+      element: <BookListUser/>
+    },
+    {
+      path: "/mybook",
+      element: <MyBookUser/>
     },
   ]
 )

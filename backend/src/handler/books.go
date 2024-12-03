@@ -52,7 +52,6 @@ func GetAllBooks(c *gin.Context) {
 	util.ResponseJson(c, http.StatusOK, "Success get books", books)
 }
 
-
 func CreateBook(c *gin.Context) {
 	request := c.Value("request").(dto.CreateBook)
 	author_id, _ := uuid.Parse(request.AuthorID)

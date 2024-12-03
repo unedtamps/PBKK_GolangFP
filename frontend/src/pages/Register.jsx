@@ -1,8 +1,8 @@
 import React from 'react'
-import Registerform from '../components/Registerform'
+import RegisterForm from '../components/RegisterForm'
 
 export default function Register() {
   return (
-    <div><Registerform/></div>
+    <div><RegisterForm/></div>
   )
 }

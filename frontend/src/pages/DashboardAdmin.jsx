@@ -14,9 +14,14 @@ export default function DashboardAdmin() {
     }
   }, [navigate]);
 
+  const menuItemsUser = [
+    { title: "Dashboard", link: "/landing", img: "/public/vite.svg" },
+    { title: "Daftar Buku", link: "/landing", img: "/public/vite.svg" },
+  ];
+
   return (
-    <div className="flex">
-      <Sidebar />
+    <div className="">
+      <Sidebar menuItems={menuItemsUser}/>
       <div className="flex-1 p-4 pl-72">
           <h1 className="text-2xl font-bold">Welcome!</h1>
       </div>
