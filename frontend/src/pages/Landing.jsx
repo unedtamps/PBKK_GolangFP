@@ -1,18 +1,20 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 export default function Landing() {
   const navigate = useNavigate();
 
+  useEffect(() => {
+    localStorage.clear();
+  }, []);
+
   return (
     <div className="flex items-center justify-center h-screen bg-gray-50 dark:bg-gray-900">
       <div className="text-center">
-        {/* Heading */}
         <h1 className="text-5xl font-bold text-gray-900 dark:text-white mb-6">
           My Library
         </h1>
 
-        {/* Buttons */}
         <div className="space-x-4">
           <button
             onClick={() => navigate('/login')}

@@ -16,7 +16,7 @@ export default function RegisterForm() {
     setSuccess('');
 
     try {
-      const response = await axios.post('http://localhost:8081/account/register', {
+      await axios.post('http://localhost:8081/account/register', {
         username: fullname,
         email: email,
         password: password,

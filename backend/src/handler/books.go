@@ -41,17 +41,6 @@ func GetBooksbyName(c *gin.Context) {
 	util.ResponseJson(c, http.StatusOK, "Success get books", books)
 }
 
-func GetAllBooks(c *gin.Context) {
-	books := []models.Book{}
-	result := config.DB.Preload("Author").Preload("Genre").Find(&books)
-	if result == nil {
-		util.ResponseJson(c, http.StatusInternalServerError, result.Error.Error(), nil)
-		c.Abort()
-		return
-	}
-	util.ResponseJson(c, http.StatusOK, "Success get books", books)
-}
-
 func CreateBook(c *gin.Context) {
 	request := c.Value("request").(dto.CreateBook)
 	author_id, _ := uuid.Parse(request.AuthorID)
@@ -142,6 +131,17 @@ func GetBooksByGenre(c *gin.Context) {
 	request := c.Value("request").(dto.GetBookByGenre)
 	books := []models.Book{}
 	result := config.DB.Where("genre_id = ?", request.GenreID).Find(&books)
+	if result == nil {
+		util.ResponseJson(c, http.StatusInternalServerError, result.Error.Error(), nil)
+		c.Abort()
+		return
+	}
+	util.ResponseJson(c, http.StatusOK, "Success get books", books)
+}
+
+func GetAllBooks(c *gin.Context) {
+	books := []models.Book{}
+	result := config.DB.Preload("Author").Preload("Genre").Find(&books)
 	if result == nil {
 		util.ResponseJson(c, http.StatusInternalServerError, result.Error.Error(), nil)
 		c.Abort()

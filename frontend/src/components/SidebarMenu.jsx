@@ -1,5 +1,5 @@
 import React from "react";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 const SidebarMenu = ({ link, img, title }) => {
   const location = useLocation();
@@ -8,8 +8,8 @@ const SidebarMenu = ({ link, img, title }) => {
 
   return (
     <li className="w-full">
-      <a
-        href={link}
+      <Link
+        to={link}
         className={`flex items-center p-2 text-normal font-normal group ${
           isActive
             ? "bg-white text-blue-600"
@@ -26,7 +26,7 @@ const SidebarMenu = ({ link, img, title }) => {
           }`}
         />
         <span>{title}</span>
-      </a>
+      </Link>
     </li>
   );
 };

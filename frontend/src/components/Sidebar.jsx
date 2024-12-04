@@ -1,5 +1,7 @@
 import React from "react";
 import SidebarMenu from "./SidebarMenu";
+import { Link } from "react-router-dom";
+
 
 const Sidebar = ({ menuItems }) => {
   return (
@@ -25,6 +27,24 @@ const Sidebar = ({ menuItems }) => {
               title={item.title}
             />
           ))}
+        </ul>
+        <br />
+        <hr />
+        <br />
+        <ul className="space-y-2">
+        <li className="w-full">
+          <Link
+            to="/"
+            className="flex items-center p-2 text-normal font-normal group hover:bg-blue-700"
+          >
+            <img
+              src="/public/vite.svg"
+              alt="gambar"
+              className="w-6 h-6 mr-3"
+            />
+            <span className="text-white">Logout</span>
+          </Link>
+        </li>
         </ul>
       </div>
     </aside>

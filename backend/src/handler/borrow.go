@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"net/http"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -64,10 +65,27 @@ func GetUserBorrowBooks(c *gin.Context) {
 		Preload("Book.Genre").
 		Where("account_id = ?", uuid.MustParse(cred.Id)).
 		Find(&borrows)
-	if result.Error != nil {
-		util.ResponseJson(c, 400, result.Error.Error(), nil)
+	if result == nil {
+		util.ResponseJson(c, http.StatusInternalServerError, result.Error.Error(), nil)
 		c.Abort()
 		return
 	}
 	util.ResponseJson(c, 200, "Success get user borrow books", borrows)
+}
+
+func GetAllBorrows(c *gin.Context) {
+	var borrows []models.Borrow
+
+	result := config.DB.Preload("Account").
+		Preload("Book.Author").
+		Preload("Book.Genre").
+		Find(&borrows)
+
+	if result.Error != nil {
+		util.ResponseJson(c, http.StatusInternalServerError, result.Error.Error(), nil)
+		c.Abort()
+		return
+	}
+
+	util.ResponseJson(c, 200, "Success get all borrows", borrows)
 }
