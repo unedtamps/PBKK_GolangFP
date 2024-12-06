@@ -10,6 +10,11 @@ type AcccountRegisterDTO struct {
 	Password string `validate:"required"       json:"password"`
 }
 
+type EditAccount struct {
+	Id       string `validate:"required" json:"id"`
+	Username string `                    json:"username"`
+}
+
 type GetByEmail struct {
 	Email string `validate:"required,email" uri:"email"`
 }

@@ -12,6 +12,19 @@ import (
 	"github.com/unedtamps/PBKKD_EAS/backend/util"
 )
 
+func GetAllAccounts(c *gin.Context) {
+	var accounts []models.Account
+
+	result := config.DB.Find(&accounts)
+	if result.Error != nil {
+		util.ResponseJson(c, http.StatusInternalServerError, result.Error.Error(), nil)
+		c.Abort()
+		return
+	}
+
+	util.ResponseJson(c, http.StatusOK, "Success get all accounts", accounts)
+}
+
 func GetAccountById(c *gin.Context) {
 	request := c.Value("request").(dto.GetByID)
 	Id, _ := uuid.Parse(request.ID)
@@ -67,6 +80,12 @@ func CreateAccount(c *gin.Context) {
 	}
 	util.ResponseJson(c, http.StatusCreated, "Success create account", accountModel)
 }
+
+// func EditAccount(c *gin.Context) {
+// 	request := c.Value("request").(dto.EditAccount)
+// 	account := &models.Account{}
+// 	result := config.DB.Where("id = ?", request.Id)
+// }
 
 func LoginAccount(c *gin.Context) {
 	request := c.Value("request").(dto.AccountLoginDTO)

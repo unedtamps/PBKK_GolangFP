@@ -4,8 +4,12 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom"
 import Login from './pages/Login'
 import Landing from './pages/Landing'
 import Register from './pages/Register'
-import DashboardAdmin from './pages/DashboardAdmin'
-import DashboardUser from './pages/DashboardUser'
+import DashboardAdmin from './pages/admin/DashboardAdmin'
+import DashboardUser from './pages/user/DashboardUser'
+import BookListUser from './pages/user/BookListUser'
+import BookListAdmin from './pages/admin/BookListAdmin'
+import MyBookUser from './pages/user/MyBookUser'
+import AccountListAdmin from './pages/admin/AccountListAdmin'
 
 const router = createBrowserRouter(
   [
@@ -28,6 +32,22 @@ const router = createBrowserRouter(
     {
       path: "/dashboarduser",
       element: <DashboardUser/>
+    },
+    {
+      path: "/booklistuser",
+      element: <BookListUser/>
+    },
+    {
+      path: "/accountlist",
+      element: <AccountListAdmin/>
+    },
+    {
+      path: "/booklistadmin",
+      element: <BookListAdmin/>
+    },
+    {
+      path: "/borrowlist",
+      element: <MyBookUser/>
     },
   ]
 )

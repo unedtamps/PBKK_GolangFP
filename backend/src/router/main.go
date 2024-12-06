@@ -22,6 +22,7 @@ func StartServer() error {
 		AllowCredentials: true,
 	}))
 
+	r.GET("/account/all", m.VerifiyJwtToken, handler.GetAllAccounts)
 	r.GET("/account/id/:id", m.Validate[dto.GetByID](), handler.GetAccountById)
 	r.GET(
 		"/account/username/:username",
@@ -70,6 +71,7 @@ func StartServer() error {
 
 	r.POST("/borrow/:book_id", m.VerifiyJwtToken, m.Validate[dto.BorrowBook](), handler.BorrowBooks)
 	r.GET("/borrow/list", m.VerifiyJwtToken, handler.GetUserBorrowBooks)
+	r.GET("/borrow/all", m.VerifiyJwtToken, handler.GetAllBorrows)
 
 	r.POST("/upload", m.UploadFileM, handler.UploadImage)
 
