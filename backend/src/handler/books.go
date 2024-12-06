@@ -2,6 +2,7 @@ package handler
 
 import (
 	"fmt"
+	"mime/multipart"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -51,7 +52,6 @@ func GetAllBooks(c *gin.Context) {
 	}
 	util.ResponseJson(c, http.StatusOK, "Success get books", books)
 }
-
 
 func CreateBook(c *gin.Context) {
 	request := c.Value("request").(dto.CreateBook)
@@ -171,4 +171,21 @@ func GetAllGenre(c *gin.Context) {
 		return
 	}
 	util.ResponseJson(c, http.StatusOK, "Success get genres", genres)
+}
+
+func UploadImage(c *gin.Context) {
+	file := c.Value("file").(*multipart.FileHeader)
+	ext := c.Value("mime")
+
+	path := fmt.Sprintf("%s%s", uuid.NewString(), ext)
+
+	if err := c.SaveUploadedFile(file, fmt.Sprintf("./public/%s", path)); err != nil {
+		util.ResponseJson(c, http.StatusInternalServerError, err.Error(), nil)
+		c.Abort()
+		return
+	}
+
+	util.ResponseJson(c, http.StatusCreated, "Success upload file", map[string]string{
+		"filename": fmt.Sprintf("/file/%s", path),
+	})
 }

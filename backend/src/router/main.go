@@ -13,6 +13,7 @@ import (
 
 func StartServer() error {
 	r := gin.Default()
+	r.Static("/file", "./public")
 	r.Use(cors.New(cors.Config{
 		AllowOrigins:     []string{"http://localhost:5173"},
 		AllowMethods:     []string{"GET", "POST", "PATCH", "DELETE", "OPTIONS"},
@@ -69,6 +70,8 @@ func StartServer() error {
 
 	r.POST("/borrow/:book_id", m.VerifiyJwtToken, m.Validate[dto.BorrowBook](), handler.BorrowBooks)
 	r.GET("/borrow/list", m.VerifiyJwtToken, handler.GetUserBorrowBooks)
+
+	r.POST("/upload", m.UploadFileM, handler.UploadImage)
 
 	return r.Run(fmt.Sprintf(":%s", config.Env.PORT))
 }

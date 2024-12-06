@@ -1,6 +1,7 @@
 package seeder
 
 import (
+	"fmt"
 	"log"
 	"math/rand"
 	"time"
@@ -61,6 +62,7 @@ func Books() {
 	db.Create(authors)
 	db.Create(bookGenres)
 	var books []models.Book
+	var j = 0
 	// create books
 	for a, b := range mapAuthors {
 		for _, book := range authorBooks[a] {
@@ -69,12 +71,13 @@ func Books() {
 				ID:          idBook,
 				AuthorID:    b,
 				Name:        book,
-				Picture_URL: generateRandomURL("http://library.com/picture/"),
+				Picture_URL: fmt.Sprintf("/file/example%d.jpg", j%4),
 				PDF_url:     generateRandomURL("http://library.com/pdf/"),
 				Synopsis:    bookSysnopsis[book],
 				GenreID:     mapBookGenres[book],
 			})
 			bookIDs[book] = idBook
+			j++
 		}
 	}
 	db.Create(books)
