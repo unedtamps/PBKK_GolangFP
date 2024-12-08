@@ -9,10 +9,13 @@ import axios from "axios";
 import { LuSearch } from "react-icons/lu";
 import { TextField } from "@mui/material";
 import { CreateBook } from "../../components/CreateBoook";
+import { FloatingAlert } from "../../components/FloatAlert";
 
 export default function BookListAdmin() {
 
-  const [errorMessage, setErrorMessage] = useState('')
+  const [message, setMessage] = useState("")
+  const [status, setStatus] = useState("")
+  const [title, setTitle] = useState("")
   const [bookName, setBookName] = useState()
   const [allBooks, setAllBooks] = useState([])
   const [editingBook, setEditingBook] = useState(null);
@@ -23,8 +26,13 @@ export default function BookListAdmin() {
     const token = localStorage.getItem("token");
     const role = localStorage.getItem("role");
 
-    if (!token || role !== "admin") {
+    if (!token) {
       navigate("/login");
+      return
+    }
+    if (role != "admin") {
+      navigate("/home");
+      return
     }
     fetch.fetchAllBooks(setAllBooks);
   }, [navigate]);
@@ -34,7 +42,7 @@ export default function BookListAdmin() {
     { title: "Dashboard", link: "/dashboard", img: "/public/open-book.svg" },
     { title: "Account List", link: "/accountlist", img: "/public/user.svg" },
     { title: "Book List", link: "/booklistadmin", img: "/public/book.svg" },
-    { title: "Borrow List", link: "/borrowlist", img: "/public/borrow.svg" },
+    { title: "Borrow History", link: "/borrow-history", img: "/public/borrow.svg" },
   ];
 
   const handleEdit = (book) => {
@@ -65,8 +73,13 @@ export default function BookListAdmin() {
         },
       });
       fetch.fetchAllBooks(setAllBooks)
+      setMessage("Success Deleted Book")
+      setStatus("success")
+      setTitle("Deleting Book")
     } catch (error) {
-      alert(error)
+      setMessage(error.response.data.message)
+      setStatus("error")
+      setTitle(error.message)
     }
   }
 
@@ -97,14 +110,23 @@ export default function BookListAdmin() {
       <Sidebar menuItems={menuItemsUser} />
       <div className="flex-1 pl-72 p-6">
 
+        {message && (
+          <FloatingAlert
+            message={message}
+            status={status}
+            title={title}
+            onClose={() => { setMessage(""); setStatus(""); setTitle("") }} // Reset error message
+          />
+        )}
 
         {editingBook && (
-          <EditBook id={editingBook.id} pdf_link={editingBook.pdf_url} sysnopsis={editingBook.synopsis} bookname={editingBook.name} on_cancel={handleCancelEdit} />
+          <EditBook id={editingBook.id} pdf_link={editingBook.pdf_url} sysnopsis={editingBook.synopsis} bookname={editingBook.name} on_cancel={handleCancelEdit} setTitle={setTitle} setMessage={setMessage} setStatus={setStatus} />
         )}
 
         {crateBook && (
-          <CreateBook on_cancel={handleCancelCreate} />
+          <CreateBook on_cancel={handleCancelCreate} setTitle={setTitle} setMessage={setMessage} setStatus={setStatus} />
         )}
+
 
         <Text className="text-2xl font-bold mb-2" >Book List</Text>
 
@@ -136,7 +158,7 @@ export default function BookListAdmin() {
                   <div className="flex justify-between">
                     <Button colorScheme="blue" className="bg-blue-400 rounded-lg px-2" onClick={() => handleEdit(item)}>Edit</Button>
                     <Button colorScheme="blue" className="bg-red-400 rounded-lg px-2" size="sm" onClick={() => DeleteBook(item.id)}>Delete</Button>
-                    <Button colorScheme="blue" className="bg-green-400 rounded-lg px-2" size="sm" onClick={() => navigate(`/editbook/${item.id}`)}>Access</Button>
+                    <Link href={item.pdf_url}><Button colorScheme="blue" className="bg-green-400 rounded-lg px-2" size="sm">Access</Button></Link>
                   </div>
                 </Table.Cell>
               </Table.Row>

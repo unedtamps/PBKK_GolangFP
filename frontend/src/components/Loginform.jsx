@@ -23,7 +23,7 @@ export default function LoginForm() {
       if (role === "admin") {
         navigate("/dashboard");
       } else {
-        navigate("/dashboarduser");
+        navigate("/home");
       }
     } catch (err) {
       setError("Invalid email or password");

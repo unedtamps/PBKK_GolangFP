@@ -3,7 +3,7 @@ import { Textarea, Input } from "@chakra-ui/react";
 import { API_URL } from "../utils/constans";
 import axios from "axios";
 
-export const CreateBook = ({ on_cancel }) => {
+export const CreateBook = ({ on_cancel, setMessage, setStatus, setTitle }) => {
   const [name, setName] = useState("");
   const [pdfLink, setPdfLink] = useState("");
   const [synopsis, setSynopsis] = useState("");
@@ -57,10 +57,20 @@ export const CreateBook = ({ on_cancel }) => {
         },
       });
       setPictureURL(response.data.data.filename);
-      alert("Picture uploaded successfully!");
+      if (response.status == 201) {
+        setMessage("Success Upload Picture")
+        setStatus("success")
+        setTitle("Upload Picture Book")
+      } else {
+        setMessage("Failed to upload picture")
+        setStatus("error")
+        setTitle("Upload Picture Book")
+      }
+
     } catch (error) {
-      console.error("Error uploading picture:", error);
-      alert(error.message);
+      setMessage(error.response.data.message)
+      setStatus("error")
+      setTitle(error.message)
     }
   };
 
@@ -70,8 +80,7 @@ export const CreateBook = ({ on_cancel }) => {
     setLoading(true);
 
     try {
-      console.log(name, pdfLink, synopsis, genreId, authorId, pictureURL)
-      await fetch(`${API_URL}/book/create`, {
+      const response = await fetch(`${API_URL}/book/create`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -86,12 +95,20 @@ export const CreateBook = ({ on_cancel }) => {
           pic_url: pictureURL,
         }),
       });
-
+      if (response.status == 201) {
+        setMessage("Success Upload Book")
+        setStatus("success")
+        setTitle("Upload Book")
+      } else {
+        setMessage("Failed to upload Book ")
+        setStatus("error")
+        setTitle("Upload Book")
+      }
       on_cancel();
     } catch (error) {
-      console.error(error.message);
-      alert("Error creating the book.");
-
+      setMessage(error.response.data.message)
+      setStatus("error")
+      setTitle(error.message)
     } finally {
       setLoading(false);
     }

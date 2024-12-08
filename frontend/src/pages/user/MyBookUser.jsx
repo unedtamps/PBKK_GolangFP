@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Sidebar from "../../components/Sidebar";
 import { API_URL } from '../../utils/constans';
+import { useNavigate } from 'react-router-dom';
 
 const CardBookBaru = ({ books }) => {
   return (
@@ -32,21 +33,32 @@ const CardBookBaru = ({ books }) => {
 export default function MyBooks() {
   const [borrowedBooks, setBorrowedBooks] = useState([]);
   const menuItemsUser = [
-    { title: "List Books", link: "/dashboarduser", img: "/public/open-book.svg" },
+    { title: "Home", link: "/home", img: "/public/open-book.svg" },
     { title: "My Books", link: "/mybook", img: "/public/user.svg" },
   ];
 
+  const navigate = useNavigate();
+
   useEffect(() => {
+
+    const token = localStorage.getItem("token");
+    const role = localStorage.getItem("role");
+
+    if (!token) {
+      navigate("/login");
+      return
+    }
+
+    if (role != "user") {
+      navigate("/dashboard")
+      return
+    }
+
     const fetchBorrowedBooks = async () => {
-      try {
-        const response = await axios.get(`${API_URL}/borrow/list`, {
-          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-        });
-        setBorrowedBooks(response.data.data || []);
-      } catch (error) {
-        console.error("Failed to fetch borrowed books", error);
-        alert("Failed to fetch borrowed books.");
-      }
+      const response = await axios.get(`${API_URL}/borrow/list`, {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      });
+      setBorrowedBooks(response.data.data || []);
     };
 
     fetchBorrowedBooks();

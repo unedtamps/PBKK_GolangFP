@@ -12,9 +12,11 @@ export const FloatingAlert = ({ message, onClose, status, title, duration = 5000
 
   return (
     <>
-      <Alert status={status} title={title}>
-        {message}
-      </Alert>
+      <div className="floating-alert bg-white shadow-lg border border-gray-300">
+        <Alert status={status} title={title}>
+          {message}
+        </Alert>
+      </div>
     </>
   );
 };

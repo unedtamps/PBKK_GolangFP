@@ -5,13 +5,10 @@ import Login from './pages/Login'
 import Landing from './pages/Landing'
 import Register from './pages/Register'
 import DashboardAdmin from './pages/admin/DashboardAdmin'
-import DashboardUser from './pages/user/DashboardUser'
+import Home from './pages/user/Home'
 import BookListAdmin from './pages/admin/BookListAdmin'
-import MyBookUser from './pages/user/MyBookUser'
 import AccountListAdmin from './pages/admin/AccountListAdmin'
 import { ChakraProvider, defaultSystem } from '@chakra-ui/react'
-import { ThemeProvider } from "next-themes"
-import BookListUser from './components/BookListUser'
 import MyBooks from './pages/user/MyBookUser'
 
 
@@ -34,8 +31,8 @@ const router = createBrowserRouter(
       element: <DashboardAdmin />
     },
     {
-      path: "/dashboarduser",
-      element: <DashboardUser />
+      path: "/home",
+      element: <Home />
     },
     {
       path: "/accountlist",
@@ -44,10 +41,6 @@ const router = createBrowserRouter(
     {
       path: "/booklistadmin",
       element: <BookListAdmin />
-    },
-    {
-      path: "/borrowlist",
-      element: <MyBookUser />
     },
     {
       path: "/mybook",

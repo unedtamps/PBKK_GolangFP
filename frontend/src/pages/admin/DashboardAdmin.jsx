@@ -20,13 +20,17 @@ export default function DashboardAdmin() {
   const [allBorrows, setAllBorrows] = useState([]);
   const navigate = useNavigate();
   const username = localStorage.getItem("username");
-
   useEffect(() => {
     const token = localStorage.getItem("token");
     const role = localStorage.getItem("role");
 
-    if (!token || role !== "admin") {
-      navigate(role === "admin" ? "/dashboard" : "/login");
+    if (!token) {
+      navigate("/login");
+      return
+    }
+    if (role != "admin") {
+      navigate("/home");
+      return
     }
 
     fetch.fetchAllBooks(setAllBooks);
@@ -35,10 +39,10 @@ export default function DashboardAdmin() {
   }, [navigate]);
 
   const menuItemsUser = [
-    { title: "Dashboard", link: "/dashboard", img: "/public/vite.svg" },
-    { title: "Account List", link: "/accountlist", img: "/public/vite.svg" },
-    { title: "Book List", link: "/booklistadmin", img: "/public/vite.svg" },
-    { title: "Borrow List", link: "/borrowlist", img: "/public/vite.svg" },
+    { title: "Dashboard", link: "/dashboard", img: "/public/open-book.svg" },
+    { title: "Account List", link: "/accountlist", img: "/public/user.svg" },
+    { title: "Book List", link: "/booklistadmin", img: "/public/book.svg" },
+    { title: "Borrow History", link: "/borrow-history", img: "/public/borrow.svg" },
   ];
 
   return (

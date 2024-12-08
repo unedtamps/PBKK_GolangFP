@@ -13,15 +13,22 @@ import { TextField } from "@mui/material";
 
 export default function AccountList() {
   const [allAccounts, setAllAccounts] = useState([]);
-  const [errorMessage, setErrorMessage] = useState('')
+  const [message, setMessage] = useState("")
+  const [status, setStatus] = useState("")
+  const [title, setTitle] = useState("")
   const navigate = useNavigate();
 
   useEffect(() => {
     const token = localStorage.getItem("token");
     const role = localStorage.getItem("role");
 
-    if (!token || role !== "admin") {
-      navigate(role === "admin" ? "/dashboard" : "/login");
+    if (!token) {
+      navigate("/login");
+      return
+    }
+    if (role != "admin") {
+      navigate("/home");
+      return
     }
 
     fetch.fetchAllAccounts(setAllAccounts);
@@ -31,7 +38,7 @@ export default function AccountList() {
     { title: "Dashboard", link: "/dashboard", img: "/public/open-book.svg" },
     { title: "Account List", link: "/accountlist", img: "/public/user.svg" },
     { title: "Book List", link: "/booklistadmin", img: "/public/book.svg" },
-    { title: "Borrow List", link: "/borrowlist", img: "/public/borrow.svg" },
+    { title: "Borrow History", link: "/borrow-history", img: "/public/borrow.svg" },
   ];
 
   const DeleteAccount = async (id) => {
@@ -42,8 +49,13 @@ export default function AccountList() {
         },
       });
       fetch.fetchAllAccounts(setAllAccounts)
+      setMessage("Success Deleted Account")
+      setStatus("success")
+      setTitle("Deleting Account")
     } catch (error) {
-      setErrorMessage(error.message)
+      setMessage(error.response.data.message)
+      setStatus("error")
+      setTitle(error.message)
     }
   }
 
@@ -61,15 +73,15 @@ export default function AccountList() {
     <div className="flex justify-center min-h-screen bg-gray-100">
       <Sidebar menuItems={menuItemsUser} />
       <div className="flex-1 pl-72 p-2 ">
-        {errorMessage && (
+
+        {message && (
           <FloatingAlert
-            message={errorMessage}
-            status="error"
-            title="Invalid"
-            onClose={() => setErrorMessage("")} // Reset error message
+            message={message}
+            status={status}
+            title={title}
+            onClose={() => { setMessage(""); setStatus(""); setTitle("") }} // Reset error message
           />
         )}
-
         <Text className="text-2xl font-bold mb-2" > Account List</Text>
         <div className="mb-4">
           <IconButton className="bg-slate-800" aria-label="Search database">

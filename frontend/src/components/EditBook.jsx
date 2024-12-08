@@ -2,12 +2,11 @@ import React, { useState } from "react";
 import { Textarea } from "@chakra-ui/react";
 import { API_URL } from "../utils/constans";
 
-export const EditBook = ({ id, bookname, pdf_link, sysnopsis, on_cancel }) => {
+export const EditBook = ({ id, bookname, pdf_link, sysnopsis, setMessage, setStatus, setTitle, on_cancel }) => {
   const [name, setName] = useState(bookname);
   const [pdfLink, setPdfLink] = useState(pdf_link);
   const [synopsis, setSynopsis] = useState(sysnopsis);
   const [loading, setLoading] = useState(false);
-
   const handleSubmit = async (e) => {
     e.preventDefault(); // Prevent default form submission behavior
     setLoading(true);
@@ -21,23 +20,28 @@ export const EditBook = ({ id, bookname, pdf_link, sysnopsis, on_cancel }) => {
         },
         body: JSON.stringify({ "id": id, "name": name, "pdf_url": pdfLink, "sysnopsis": synopsis }),
       });
-
-      if (!response.ok) {
-        throw new Error("Failed to update the book");
+      console.log("masuk sini")
+      if (response.status == 200) {
+        setMessage("Success Edited Book")
+        setStatus("success")
+        setTitle("Edited Book")
+      } else {
+        setMessage("Failed to edit book")
+        setStatus("error")
+        setTitle("Editing Book")
       }
-
-      alert("Book updated successfully!");
       on_cancel(); // Close the edit form
     } catch (error) {
-      console.error(error.message);
-      alert("Error updating the book.");
+      setMessage(error.response.data.message)
+      setStatus("error")
+      setTitle(error.message)
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="flex items-center justify-center h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="flex items-center justify-center h-screen bg-gray-50 dark:bg-gray-900 -z-50">
       <div className="w-full max-w-xl bg-white rounded-lg shadow dark:border dark:bg-gray-800 dark:border-gray-700">
         <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
           <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
