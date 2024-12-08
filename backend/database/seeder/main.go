@@ -71,7 +71,7 @@ func Books() {
 				ID:          idBook,
 				AuthorID:    b,
 				Name:        book,
-				Picture_URL: fmt.Sprintf("/file/example%d.jpg", j%4),
+				Picture_URL: fmt.Sprintf("/file/example%d.jpg", j%5),
 				PDF_url:     generateRandomURL("http://library.com/pdf/"),
 				Synopsis:    bookSysnopsis[book],
 				GenreID:     mapBookGenres[book],

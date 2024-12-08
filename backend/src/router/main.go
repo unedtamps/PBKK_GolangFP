@@ -15,7 +15,7 @@ func StartServer() error {
 	r := gin.Default()
 	r.Static("/file", "./public")
 	r.Use(cors.New(cors.Config{
-		AllowOrigins:     []string{"http://localhost:5173"},
+		AllowOrigins:     []string{"*"},
 		AllowMethods:     []string{"GET", "POST", "PATCH", "DELETE", "OPTIONS"},
 		AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
 		ExposeHeaders:    []string{"Content-Length"},
@@ -24,6 +24,8 @@ func StartServer() error {
 
 	r.GET("/account/all", m.VerifiyJwtToken, handler.GetAllAccounts)
 	r.GET("/account/id/:id", m.Validate[dto.GetByID](), handler.GetAccountById)
+	r.DELETE("/account/id/:id", m.Validate[dto.GetByID](), handler.DeleteAccoundById)
+
 	r.GET(
 		"/account/username/:username",
 		m.Validate[dto.GetByUsername](),
@@ -47,6 +49,18 @@ func StartServer() error {
 	)
 	r.GET("/book/authors", m.VerifiyJwtToken, handler.GetAllAuthor)
 	r.GET("/book/genres", m.VerifiyJwtToken, handler.GetAllGenre)
+	r.GET(
+		"/book/genre/:genre_id",
+		m.VerifiyJwtToken,
+		m.Validate[dto.GetBookByGenre](),
+		handler.GetBooksByGenre,
+	)
+	r.GET(
+		"/book/author/:author_id",
+		m.VerifiyJwtToken,
+		m.Validate[dto.GetBookByAuthor](),
+		handler.GetBooksByAuthor,
+	)
 	r.POST(
 		"/book/create",
 		m.VerifiyJwtToken,

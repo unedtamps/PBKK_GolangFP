@@ -68,7 +68,7 @@ func CreateBook(c *gin.Context) {
 		c.Abort()
 		return
 	}
-	util.ResponseJson(c, http.StatusOK, "Success create book", newBooks)
+	util.ResponseJson(c, http.StatusCreated, "Success create book", newBooks)
 }
 
 func EditBook(c *gin.Context) {
@@ -119,7 +119,10 @@ func DeleteBook(c *gin.Context) {
 func GetBooksByAuthor(c *gin.Context) {
 	request := c.Value("request").(dto.GetBookByAuthor)
 	books := []models.Book{}
-	result := config.DB.Where("author_id = ?", request.AuthorID).Find(&books)
+	result := config.DB.Preload("Author").
+		Preload("Genre").
+		Where("author_id = ?", request.AuthorID).
+		Find(&books)
 	if result == nil {
 		util.ResponseJson(c, http.StatusInternalServerError, result.Error.Error(), nil)
 		c.Abort()
@@ -131,7 +134,10 @@ func GetBooksByAuthor(c *gin.Context) {
 func GetBooksByGenre(c *gin.Context) {
 	request := c.Value("request").(dto.GetBookByGenre)
 	books := []models.Book{}
-	result := config.DB.Where("genre_id = ?", request.GenreID).Find(&books)
+	result := config.DB.Preload("Author").
+		Preload("Genre").
+		Where("genre_id = ?", request.GenreID).
+		Find(&books)
 	if result == nil {
 		util.ResponseJson(c, http.StatusInternalServerError, result.Error.Error(), nil)
 		c.Abort()

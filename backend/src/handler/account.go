@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -15,7 +16,7 @@ import (
 func GetAllAccounts(c *gin.Context) {
 	var accounts []models.Account
 
-	result := config.DB.Find(&accounts)
+	result := config.DB.Where("role = ?", "user").Find(&accounts)
 	if result.Error != nil {
 		util.ResponseJson(c, http.StatusInternalServerError, result.Error.Error(), nil)
 		c.Abort()
@@ -38,10 +39,31 @@ func GetAccountById(c *gin.Context) {
 	util.ResponseJson(c, http.StatusOK, "Success get user by id", user)
 }
 
+func DeleteAccoundById(c *gin.Context) {
+	request := c.Value("request").(dto.GetByID)
+	Id, _ := uuid.Parse(request.ID)
+	user := &models.Account{}
+	result := config.DB.Where(&models.Account{ID: Id}).First(user)
+	if result.Error != nil {
+		util.ResponseJson(c, http.StatusInternalServerError, result.Error.Error(), nil)
+		c.Abort()
+		return
+	}
+	result = config.DB.Delete(user)
+	if result.Error != nil {
+		util.ResponseJson(c, http.StatusInternalServerError, result.Error.Error(), nil)
+		c.Abort()
+		return
+	}
+	util.ResponseJson(c, http.StatusOK, "Success get delete by id", user)
+}
+
 func GetAccountByUsername(c *gin.Context) {
 	request := c.Value("request").(dto.GetByUsername)
-	user := &models.Account{}
-	result := config.DB.Where(&models.Account{Username: request.Username}).First(user)
+	user := []models.Account{}
+	result := config.DB.Where("username LIKE ?", fmt.Sprintf("%%%s%%", request.Username)).
+		Where("role = ?", "user").
+		Find(&user)
 	if result.Error != nil {
 		util.ResponseJson(c, http.StatusInternalServerError, result.Error.Error(), nil)
 		c.Abort()
