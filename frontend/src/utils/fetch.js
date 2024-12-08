@@ -21,7 +21,7 @@ export const fetch = {
       setAllAccounts(response.data.data || []);
     } catch (error) {
       console.error("Failed to fetch all accounts", error);
-      alert("Failed to fetch all accounts. Please try again later.");
+      alert(error);
     }
   },
 

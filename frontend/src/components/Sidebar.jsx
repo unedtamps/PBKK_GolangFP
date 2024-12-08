@@ -10,11 +10,11 @@ const Sidebar = ({ menuItems }) => {
       aria-label="Sidenav"
     >
       <div className="flex items-center justify-center py-2 mt-4">
-          <img
-            src="/public/vite.svg"
-            alt="judul"
-            className="w-12"
-          />
+        <img
+          src="/public/book.svg"
+          alt="judul"
+          className="w-12"
+        />
       </div>
 
       <div className="overflow-y-auto py-5 px-3 h-full">
@@ -32,19 +32,19 @@ const Sidebar = ({ menuItems }) => {
         <hr />
         <br />
         <ul className="space-y-2">
-        <li className="w-full">
-          <Link
-            to="/"
-            className="flex items-center p-2 text-normal font-normal group hover:bg-blue-700"
-          >
-            <img
-              src="/public/vite.svg"
-              alt="gambar"
-              className="w-6 h-6 mr-3"
-            />
-            <span className="text-white">Logout</span>
-          </Link>
-        </li>
+          <li className="w-full">
+            <Link
+              to="/"
+              className="flex items-center p-2 text-normal font-normal group hover:bg-blue-700"
+            >
+              <img
+                src="/public/logout.svg"
+                alt="gambar"
+                className="w-6 h-6 mr-3"
+              />
+              <span className="text-white">Logout</span>
+            </Link>
+          </li>
         </ul>
       </div>
     </aside>

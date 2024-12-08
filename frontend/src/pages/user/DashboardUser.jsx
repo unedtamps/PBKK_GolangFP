@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import Sidebar from "../../components/Sidebar";
+import BookListUser from "../../components/BookListUser";
 
 export default function DashboardUser() {
   const navigate = useNavigate();
@@ -16,9 +17,8 @@ export default function DashboardUser() {
   }, [navigate]);
 
   const menuItemsUser = [
-    { title: "Dashboard", link: "/dashboarduser", img: "/public/vite.svg" },
-    { title: "Daftar Buku", link: "/booklistuser", img: "/public/vite.svg" },
-    { title: "My Books", link: "/mybook", img: "/public/vite.svg" },
+    { title: "List Books", link: "/dashboarduser", img: "/public/open-book.svg" },
+    { title: "My Books", link: "/mybook", img: "/public/user.svg" },
   ];
 
   return (
@@ -31,21 +31,9 @@ export default function DashboardUser() {
         </h2>
 
         <h2 className="text-xl py-6 font-semibold text-black">
-          Check Our Popular Book!
+          Check All of Our Book !!
         </h2>
-
-        
-
-        <h2 className="text-xl font-semibold text-black">
-          Or See all List!
-        </h2>
-
-        <button
-          className="mt-3 px-6 py-3 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400"
-          onClick={() => navigate("/booklistuser")}
-        >
-          View All
-        </button>
+        <BookListUser />
       </div>
     </div>
   );

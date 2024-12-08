@@ -6,55 +6,62 @@ import Landing from './pages/Landing'
 import Register from './pages/Register'
 import DashboardAdmin from './pages/admin/DashboardAdmin'
 import DashboardUser from './pages/user/DashboardUser'
-import BookListUser from './pages/user/BookListUser'
 import BookListAdmin from './pages/admin/BookListAdmin'
 import MyBookUser from './pages/user/MyBookUser'
 import AccountListAdmin from './pages/admin/AccountListAdmin'
+import { ChakraProvider, defaultSystem } from '@chakra-ui/react'
+import { ThemeProvider } from "next-themes"
+import BookListUser from './components/BookListUser'
+import MyBooks from './pages/user/MyBookUser'
+
 
 const router = createBrowserRouter(
   [
     {
       path: "/",
-      element: <Landing/>
+      element: <Landing />
     },
     {
       path: "/login",
-      element: <Login/>
+      element: <Login />
     },
     {
       path: "/register",
-      element: <Register/>
+      element: <Register />
     },
     {
       path: "/dashboard",
-      element: <DashboardAdmin/>
+      element: <DashboardAdmin />
     },
     {
       path: "/dashboarduser",
-      element: <DashboardUser/>
-    },
-    {
-      path: "/booklistuser",
-      element: <BookListUser/>
+      element: <DashboardUser />
     },
     {
       path: "/accountlist",
-      element: <AccountListAdmin/>
+      element: <AccountListAdmin />
     },
     {
       path: "/booklistadmin",
-      element: <BookListAdmin/>
+      element: <BookListAdmin />
     },
     {
       path: "/borrowlist",
-      element: <MyBookUser/>
+      element: <MyBookUser />
     },
+    {
+      path: "/mybook",
+      element: <MyBooks />
+
+    }
   ]
 )
 
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <RouterProvider router={router}/>
+    <ChakraProvider value={defaultSystem}>
+      <RouterProvider router={router} />
+    </ChakraProvider>
   </StrictMode>,
 )
