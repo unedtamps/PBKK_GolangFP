@@ -18,7 +18,7 @@ export default function Landing() {
         <div className="space-x-4">
           <button
             onClick={() => navigate('/login')}
-            className="px-6 py-3 text-white bg-blue-600 hover:bg-blue-700 rounded-lg font-medium transition duration-300"
+            className="px-6 py-3 text-white bg-blue-600 hover:bg-white border hover:text-blue-600 hover:border-blue-600 rounded-lg font-medium transition duration-300"
           >
             Login
           </button>

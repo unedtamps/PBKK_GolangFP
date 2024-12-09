@@ -86,6 +86,8 @@ func StartServer() error {
 	r.POST("/borrow/:book_id", m.VerifiyJwtToken, m.Validate[dto.BorrowBook](), handler.BorrowBooks)
 	r.GET("/borrow/list", m.VerifiyJwtToken, handler.GetUserBorrowBooks)
 	r.GET("/borrow/all", m.VerifiyJwtToken, handler.GetAllBorrows)
+	r.GET("/borrow/filter", m.VerifiyJwtToken, handler.FilterBorrowHistory)
+	r.GET("/borrow/getTopBooks", m.VerifiyJwtToken, handler.GetMostBorrowedBooks)
 
 	r.POST("/upload", m.UploadFileM, handler.UploadImage)
 

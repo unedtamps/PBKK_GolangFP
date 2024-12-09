@@ -10,6 +10,8 @@ import BookListAdmin from './pages/admin/BookListAdmin'
 import AccountListAdmin from './pages/admin/AccountListAdmin'
 import { ChakraProvider, defaultSystem } from '@chakra-ui/react'
 import MyBooks from './pages/user/MyBookUser'
+import BorrowHistory from './pages/admin/BorrowHistory'
+import BookListUser from './pages/user/BookListUser'
 
 
 const router = createBrowserRouter(
@@ -45,8 +47,15 @@ const router = createBrowserRouter(
     {
       path: "/mybook",
       element: <MyBooks />
-
-    }
+    },
+    {
+      path: "/borrow-history",
+      element: <BorrowHistory />
+    },
+    {
+      path: "/allbook",
+      element: <BookListUser />
+    },
   ]
 )
 

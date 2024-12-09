@@ -89,3 +89,68 @@ func GetAllBorrows(c *gin.Context) {
 
 	util.ResponseJson(c, 200, "Success get all borrows", borrows)
 }
+
+func FilterBorrowHistory(c *gin.Context) {
+	startDate := c.Query("start_date")
+	endDate := c.Query("end_date")
+
+	var borrows []models.Borrow
+	query := config.DB.Preload("Account").Preload("Book.Author").Preload("Book.Genre")
+
+	if startDate != "" && endDate != "" {
+		start, errStart := time.Parse("2006-01-02", startDate)
+		end, errEnd := time.Parse("2006-01-02", endDate)
+		if errStart != nil || errEnd != nil {
+			util.ResponseJson(c, http.StatusBadRequest, "Invalid date format. Use YYYY-MM-DD.", nil)
+			return
+		}
+		query = query.Where("created_at BETWEEN ? AND ?", start, end)
+
+	}
+
+	result := query.Find(&borrows)
+	if result.Error != nil {
+		util.ResponseJson(c, http.StatusInternalServerError, result.Error.Error(), nil)
+		return
+	}
+
+	util.ResponseJson(c, 200, "Filtered borrow history", borrows)
+}
+
+func GetMostBorrowedBooks(c *gin.Context) {
+	var results []struct {
+		BookID      uuid.UUID `json:"book_id"`
+		BookName    string    `json:"book_name"`
+		Author      string    `json:"author"`
+		Genre       string    `json:"genre"`
+		Synopsis    string    `json:"synopsis"`
+		Picture_URL string    `json:"picture_url"`
+		Borrowed    int       `json:"borrowed_count"`
+	}
+
+	query := `
+        SELECT 
+            books.id AS book_id, 
+            books.name AS book_name, 
+            authors.name AS author, 
+            genres.name AS genre, 
+            books.synopsis AS synopsis,
+			books.picture_url AS picture_url,
+            COUNT(borrows.book_id) AS borrowed_count
+        FROM borrows
+        INNER JOIN books ON borrows.book_id = books.id
+        INNER JOIN authors ON books.author_id = authors.id
+        INNER JOIN genres ON books.genre_id = genres.id
+        GROUP BY books.id, books.name, authors.name, genres.name, books.synopsis, books.picture_url
+        ORDER BY borrowed_count DESC
+        LIMIT 10;
+    `
+
+	result := config.DB.Raw(query).Scan(&results)
+	if result.Error != nil {
+		util.ResponseJson(c, http.StatusInternalServerError, result.Error.Error(), nil)
+		return
+	}
+
+	util.ResponseJson(c, 200, "Most borrowed books", results)
+}
