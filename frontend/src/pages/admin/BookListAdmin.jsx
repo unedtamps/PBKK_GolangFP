@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Table, Text, Button, IconButton, Image, Link } from "@chakra-ui/react"
+import { Table, Button, IconButton, Link } from "@chakra-ui/react"
 import Sidebar from "../../components/Sidebar";
 import { fetch } from "../../utils/fetch";
 import { useNavigate } from "react-router-dom";
@@ -56,14 +56,16 @@ export default function BookListAdmin() {
   };
 
   const handleCreate = () => {
-    setEditingBook(null)
-    setCreateBook("true");
+    setEditingBook(null);
+    setCreateBook(true);
   };
+  
 
   const handleCancelCreate = () => {
-    fetch.fetchAllBooks(setAllBooks)
+    fetch.fetchAllBooks(setAllBooks);
     setCreateBook(null);
   };
+  
 
   const DeleteBook = async (id) => {
     try {
@@ -106,67 +108,82 @@ export default function BookListAdmin() {
 
 
   return (
-    <div className="flex min-h-screen bg-gray-100">
-      <Sidebar menuItems={menuItemsUser} />
-      <div className="flex-1 pl-72 p-6">
+    <div>
+    <Sidebar menuItems={menuItemsUser} />
 
-        {message && (
-          <FloatingAlert
-            message={message}
-            status={status}
-            title={title}
-            onClose={() => { setMessage(""); setStatus(""); setTitle("") }} // Reset error message
-          />
-        )}
+    {message && (
+      <FloatingAlert
+        message={message}
+        status={status}
+        title={title}
+        onClose={() => { setMessage(""); setStatus(""); setTitle("") }} // Reset error message
+      />
+    )}
 
-        {editingBook && (
-          <EditBook id={editingBook.id} pdf_link={editingBook.pdf_url} sysnopsis={editingBook.synopsis} bookname={editingBook.name} on_cancel={handleCancelEdit} setTitle={setTitle} setMessage={setMessage} setStatus={setStatus} />
-        )}
-
-        {crateBook && (
-          <CreateBook on_cancel={handleCancelCreate} setTitle={setTitle} setMessage={setMessage} setStatus={setStatus} />
-        )}
-
-
-        <Text className="text-2xl font-bold mb-2" >Book List</Text>
-
-        <div className="mb-4">
-          <IconButton className="bg-slate-800" aria-label="Search database">
-            <LuSearch />
-          </IconButton>
-          <TextField size="small" id="outlined-basic" label="Enter Search Book" onKeyDown={handleChange} variant="outlined" />
-        </div>
-
-        <Button colorScheme="blue" className="bg-yellow-400 rounded-lg px-8 mb-2 " onClick={() => handleCreate()}>Create</Button>
-
-        <Table.Root size="sm" striped>
-          <Table.Header>
-            <Table.Row>
-              <Table.ColumnHeader>Name</Table.ColumnHeader>
-              <Table.ColumnHeader>Author</Table.ColumnHeader>
-              <Table.ColumnHeader>Genre</Table.ColumnHeader>
-              <Table.ColumnHeader >Action</Table.ColumnHeader>
-            </Table.Row>
-          </Table.Header>
-          <Table.Body>
-            {allBooks.map((item) => (
-              <Table.Row key={item.id}>
-                <Table.Cell><Link href={`${API_URL}${item.picture_url}`}>{item.name}</Link></Table.Cell>
-                <Table.Cell>{item.author.name}</Table.Cell>
-                <Table.Cell>{item.genre.name}</Table.Cell>
-                <Table.Cell >
-                  <div className="flex justify-between">
-                    <Button colorScheme="blue" className="bg-blue-400 rounded-lg px-2" onClick={() => handleEdit(item)}>Edit</Button>
-                    <Button colorScheme="blue" className="bg-red-400 rounded-lg px-2" size="sm" onClick={() => DeleteBook(item.id)}>Delete</Button>
-                    <Link href={item.pdf_url}><Button colorScheme="blue" className="bg-green-400 rounded-lg px-2" size="sm">Access</Button></Link>
-                  </div>
-                </Table.Cell>
-              </Table.Row>
-            ))}
-          </Table.Body>
-        </Table.Root>
-
-      </div>
+    <div className="bg-white">
+      <h1 className="font-sans font-semibold text-2xl pl-72 p-6">
+          Book List
+      </h1>
     </div>
+
+    <div className="bg-gray-200 pl-64 ml-5 pr-5 pb-64 py-5">
+            {editingBook && (
+              <EditBook id={editingBook.id} pdf_link={editingBook.pdf_url} sysnopsis={editingBook.synopsis} bookname={editingBook.name} on_cancel={handleCancelEdit} setTitle={setTitle} setMessage={setMessage} setStatus={setStatus} />
+            )}
+
+            {crateBook && (
+                <CreateBook on_cancel={handleCancelCreate} setTitle={setTitle} setMessage={setMessage} setStatus={setStatus} />
+            )}
+
+            <div className="flex justify-between items-center mb-6">
+                  <div className="flex items-center">
+                    <IconButton className="bg-blue-600 text-white" aria-label="Search database">
+                      <LuSearch />
+                    </IconButton>
+                    <TextField
+                      size="small"
+                      id="outlined-basic"
+                      label="Enter Search Book"
+                      onKeyDown={handleChange}
+                      variant="outlined"
+                    />
+                  </div>
+                  <Button
+                    colorScheme="blue"
+                    className="bg-blue-600 rounded-lg px-8 text-white"
+                    onClick={handleCreate}
+                  >
+                    Create
+                  </Button>
+                </div>
+
+            <Table.Root striped>
+              <Table.Header>
+                <Table.Row bg="blue.600">
+                  <Table.ColumnHeader color="white">Name</Table.ColumnHeader>
+                  <Table.ColumnHeader color="white">Author</Table.ColumnHeader>
+                  <Table.ColumnHeader color="white">Genre</Table.ColumnHeader>
+                  <Table.ColumnHeader color="white" className="text-center">Action</Table.ColumnHeader>
+                </Table.Row>
+              </Table.Header>
+              <Table.Body>
+                {allBooks.map((item) => (
+                  <Table.Row key={item.id}>
+                    <Table.Cell><Link href={`${API_URL}${item.picture_url}`}>{item.name}</Link></Table.Cell>
+                    <Table.Cell>{item.author.name}</Table.Cell>
+                    <Table.Cell>{item.genre.name}</Table.Cell>
+                    <Table.Cell >
+                      <div className="flex justify-center items-center space-x-2">
+                        <Button colorScheme="blue" className="bg-yellow-300 rounded-lg px-2" size="sm" onClick={() => handleEdit(item)}>Edit</Button>
+                        <Button colorScheme="blue" className="bg-red-700 rounded-lg px-2" size="sm" onClick={() => DeleteBook(item.id)}>Delete</Button>
+                        <Link href={item.pdf_url}><Button colorScheme="blue" className="bg-green-500 rounded-lg px-2" size="sm">Access</Button></Link>
+                      </div>
+                    </Table.Cell>
+                  </Table.Row>
+                ))}
+              </Table.Body>
+            </Table.Root>
+    </div>
+  </div>
   );
 };

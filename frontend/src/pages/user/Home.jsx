@@ -205,7 +205,7 @@ export default function Home() {
         <div className="rounded-lg bg-white mx-3 mr-6 mt-3 mb-5 relative">
           <h1 className="font-sans text-xl ml-5 mt-3 pt-3">Recommended</h1>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 pb-5 my-3 mx-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6 pb-5 my-3 mx-5">
             <CardBook
               books={topBooks}
               borrowBook={borrowBook}

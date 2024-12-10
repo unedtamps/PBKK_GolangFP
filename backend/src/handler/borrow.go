@@ -143,7 +143,7 @@ func GetMostBorrowedBooks(c *gin.Context) {
         INNER JOIN genres ON books.genre_id = genres.id
         GROUP BY books.id, books.name, authors.name, genres.name, books.synopsis, books.picture_url
         ORDER BY borrowed_count DESC
-        LIMIT 10;
+        LIMIT 5;
     `
 
 	result := config.DB.Raw(query).Scan(&results)
@@ -153,4 +153,31 @@ func GetMostBorrowedBooks(c *gin.Context) {
 	}
 
 	util.ResponseJson(c, 200, "Most borrowed books", results)
+}
+
+func GetMonthlyBorrowStats(c *gin.Context) {
+	var results []struct {
+		Month string `json:"month"`
+		Year  int    `json:"year"`
+		Count int    `json:"count"`
+	}
+
+	query := `
+        SELECT 
+            strftime('%Y', created_at) AS year, 
+            strftime('%m', created_at) AS month,
+            COUNT(*) AS count
+        FROM borrows
+        WHERE created_at >= DATE('now', '-4 months', 'start of month') 
+        GROUP BY year, month
+        ORDER BY year DESC, month ASC;
+    `
+
+	result := config.DB.Raw(query).Scan(&results)
+	if result.Error != nil {
+		util.ResponseJson(c, http.StatusInternalServerError, result.Error.Error(), nil)
+		return
+	}
+
+	util.ResponseJson(c, 200, "Borrow stats per month", results)
 }

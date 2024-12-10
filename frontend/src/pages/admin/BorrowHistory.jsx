@@ -1,12 +1,17 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import {
-  Table, Box, HStack, Input, Button
+  Table, Box, HStack, Input, Button, Link
 } from "@chakra-ui/react";
 import Sidebar from "../../components/Sidebar";
+import { FloatingAlert } from "../../components/FloatAlert";
 import { API_URL } from "../../utils/constans";
 
+
 export default function BorrowHistory() {
+  const [message, setMessage] = useState("")
+  const [status, setStatus] = useState("")
+  const [title, setTitle] = useState("")
   const [borrowHistory, setBorrowHistory] = useState([]);
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
@@ -40,10 +45,26 @@ export default function BorrowHistory() {
   ];
 
   return (
-    <div className="flex min-h-screen bg-gray-100">
-        <Sidebar menuItems={menuItemsUser} />
-        <div className="flex-1 pl-72 p-6">
-            <Box p={4}>
+    <div>
+    <Sidebar menuItems={menuItemsUser} />
+
+    {message && (
+      <FloatingAlert
+        message={message}
+        status={status}
+        title={title}
+        onClose={() => { setMessage(""); setStatus(""); setTitle("") }} // Reset error message
+      />
+    )}
+
+    <div className="bg-white">
+      <h1 className="font-sans font-semibold text-2xl pl-72 p-6">
+          Borrow List
+      </h1>
+    </div>
+
+    <div className="bg-gray-200 pl-64 ml-5 pr-5 pb-64 py-5">
+        <Box p={4}>
             <HStack spacing={4} mb={4}>
                 <Input
                 type="date"
@@ -57,55 +78,35 @@ export default function BorrowHistory() {
                 onChange={(e) => setEndDate(e.target.value)}
                 placeholder="End Date"
                 />
-                <Button colorScheme="blue" className="bg-blue-600 rounded-lg px-8" onClick={handleFilter}>
+                <Button colorScheme="blue" className="bg-blue-600 rounded-lg px-8 text-white" onClick={handleFilter}>
                 Filter
                 </Button>
             </HStack>
 
-            <Table.Root variant="striped" colorScheme="gray">
+            <Table.Root striped>
                 <Table.Header>
-                <Table.Row>
-                    <Table.ColumnHeader>Name</Table.ColumnHeader>
-                    <Table.ColumnHeader>Author</Table.ColumnHeader>
-                    <Table.ColumnHeader>Genre</Table.ColumnHeader>
-                    <Table.ColumnHeader>Action</Table.ColumnHeader>
+                <Table.Row bg="blue.600">
+                    <Table.ColumnHeader color="white">Username</Table.ColumnHeader>
+                    <Table.ColumnHeader color="white">Book</Table.ColumnHeader>
+                    <Table.ColumnHeader color="white">Author</Table.ColumnHeader>
+                    <Table.ColumnHeader color="white">Genre</Table.ColumnHeader>
+                    {/* <Table.ColumnHeader color="white">Date Borrowed</Table.ColumnHeader> */}
                 </Table.Row>
                 </Table.Header>
                 <Table.Body>
-                {borrowHistory.map((item) => (
-                    <Table.Row key={item.id}>
-                    <Table.Cell>{item.account.username}</Table.Cell>
-                    <Table.Cell>{item.book.author.name}</Table.Cell>
-                    <Table.Cell>{item.book.genre.name}</Table.Cell>
-                    <Table.Cell>
-                        <HStack spacing={2}>
-                        <Button
-                            colorScheme="blue"
-                            size="sm"
-                            onClick={() => console.log("Edit clicked", item)}
-                        >
-                            Edit
-                        </Button>
-                        <Button
-                            colorScheme="red"
-                            size="sm"
-                            onClick={() => console.log("Delete clicked", item.id)}
-                        >
-                            Delete
-                        </Button>
-                        <a href={item.book.pdf_url} target="_blank" rel="noopener noreferrer">
-                            <Button colorScheme="green" size="sm">
-                            Access
-                            </Button>
-                        </a>
-                        </HStack>
-                    </Table.Cell>
+                {borrowHistory.map((borrow) => (
+                    <Table.Row key={borrow.id}>
+                    <Table.Cell>{borrow.account.username}</Table.Cell>
+                    <Table.Cell>{borrow.book.name}</Table.Cell>
+                    <Table.Cell>{borrow.book.author.name}</Table.Cell>
+                    <Table.Cell>{borrow.book.genre.name}</Table.Cell>
+                    {/* <Table.Cell>{borrow.created_at}</Table.Cell> */}
                     </Table.Row>
                 ))}
                 </Table.Body>
             </Table.Root>
-            </Box>
-        </div>
+        </Box>
     </div>
+  </div>
   );
 }

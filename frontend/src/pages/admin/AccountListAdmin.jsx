@@ -70,45 +70,51 @@ export default function AccountList() {
   }
 
   return (
-    <div className="flex justify-center min-h-screen bg-gray-100">
-      <Sidebar menuItems={menuItemsUser} />
-      <div className="flex-1 pl-72 p-2 ">
+    <div>
+    <Sidebar menuItems={menuItemsUser} />
 
-        {message && (
-          <FloatingAlert
-            message={message}
-            status={status}
-            title={title}
-            onClose={() => { setMessage(""); setStatus(""); setTitle("") }} // Reset error message
-          />
-        )}
-        <Text className="text-2xl font-bold mb-2" > Account List</Text>
-        <div className="mb-4">
-          <IconButton className="bg-slate-800" aria-label="Search database">
-            <LuSearch />
-          </IconButton>
-          <TextField size="small" id="outlined-basic" label="Enter Search Account" onKeyDown={handleGetAccount} variant="outlined" />
-        </div>
+    {message && (
+      <FloatingAlert
+        message={message}
+        status={status}
+        title={title}
+        onClose={() => { setMessage(""); setStatus(""); setTitle("") }} // Reset error message
+      />
+    )}
 
-        <Table.Root size="md" colorPalette="" variant="line" className=" border-black border-2 rounded-lg" striped >
-          <Table.Header bg="black">
-            <Table.Row>
-              <Table.ColumnHeader >Username</Table.ColumnHeader>
-              <Table.ColumnHeader >Email</Table.ColumnHeader>
-              <Table.ColumnHeader textAlign="end">Action</Table.ColumnHeader>
-            </Table.Row>
-          </Table.Header>
-          <Table.Body>
-            {allAccounts.map((item) => (
-              <Table.Row key={item.id}>
-                <Table.Cell>{item.username}</Table.Cell>
-                <Table.Cell>{item.email}</Table.Cell>
-                <Table.Cell textAlign="end"><Button onClick={() => DeleteAccount(item.id)} className="bg-red-500 rounded-lg p-1 text-white border border-black" size="sm">Delete</Button></Table.Cell>
-              </Table.Row>
-            ))}
-          </Table.Body>
-        </Table.Root>
-      </div>
+    <div className="bg-white">
+      <h1 className="font-sans font-semibold text-2xl pl-72 p-6">
+        Account List
+      </h1>
     </div>
+
+    <div className="bg-gray-200 pl-64 ml-5 pr-5 pb-64 py-5">
+          <div className="mb-4">
+            <IconButton className="bg-blue-600" aria-label="Search database">
+              <LuSearch />
+            </IconButton>
+            <TextField size="small" id="outlined-basic" label="Enter Search Account" onKeyDown={handleGetAccount} variant="outlined" />
+          </div>
+
+          <Table.Root striped>
+            <Table.Header>
+              <Table.Row bg="blue.600">
+                <Table.ColumnHeader color="white">Username</Table.ColumnHeader>
+                <Table.ColumnHeader color="white">Email</Table.ColumnHeader>
+                <Table.ColumnHeader color="white" className="text-center">Action</Table.ColumnHeader>
+              </Table.Row>
+            </Table.Header>
+            <Table.Body>
+              {allAccounts.map((item) => (
+                <Table.Row key={item.id}>
+                  <Table.Cell>{item.username}</Table.Cell>
+                  <Table.Cell>{item.email}</Table.Cell>
+                  <Table.Cell className="text-center"><Button onClick={() => DeleteAccount(item.id)} className="bg-red-500 rounded-lg p-1 text-white border border-black" size="sm">Delete</Button></Table.Cell>
+                </Table.Row>
+              ))}
+            </Table.Body>
+          </Table.Root>
+    </div>
+  </div>
   );
 }

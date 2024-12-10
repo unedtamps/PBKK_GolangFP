@@ -21,36 +21,72 @@ func SeedDb() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	Accout()
+	Account()
 	Books()
+	Borrow()
 }
 
-func Accout() {
-	passowrd, _ := util.GenereateHasedPassword("password")
+func Account() {
+	password, _ := util.GenereateHasedPassword("password")
+	// 3 akun default
 	account := []models.Account{
-		models.Account{
+		{
 			ID:       uuid.New(),
 			Username: "unedo",
 			Email:    "unedo@gmail.com",
 			Role:     "user",
-			Password: passowrd,
+			Password: password,
 		},
-		models.Account{
+		{
 			ID:       uuid.New(),
 			Username: "viery",
 			Email:    "viery@gmail.com",
 			Role:     "user",
-			Password: passowrd,
+			Password: password,
 		},
-		models.Account{
+		{
 			ID:       uuid.New(),
 			Username: "admin",
 			Email:    "admin@gmail.com",
 			Role:     "admin",
-			Password: passowrd,
+			Password: password,
 		},
 	}
-	db.Create(account)
+
+	// Tambah 47 akun dengan nama manusia
+	names := []string{
+		"John Doe", "Jane Smith", "Michael Johnson", "Emily Davis", "Chris Brown",
+		"Jessica Wilson", "Matthew Martinez", "Ashley Garcia", "Joshua Hernandez", "Sarah Lopez",
+		"Andrew Gonzalez", "Stephanie Clark", "Daniel Rodriguez", "Natalie Lewis", "Ryan Walker",
+		"Laura Hall", "David Allen", "Sophia Young", "James King", "Chloe Wright",
+		"Alexander Scott", "Isabella Green", "Jacob Adams", "Olivia Baker", "Ethan Nelson",
+		"Mia Carter", "William Perez", "Charlotte Mitchell", "Benjamin Roberts", "Amelia Turner",
+		"Logan Phillips", "Ella Campbell", "Jackson Parker", "Ava Evans", "Mason Edwards",
+		"Abigail Collins", "Lucas Stewart", "Harper Sanchez", "Aiden Morris", "Lily Rogers",
+		"Henry Reed", "Zoe Cook", "Sebastian Morgan", "Madison Bell", "Jack Bailey",
+		"Victoria Rivera",
+	}
+
+	for _, name := range names {
+		username := generateUsername(name)
+		email := fmt.Sprintf("%s@gmail.com", username)
+		account = append(account, models.Account{
+			ID:       uuid.New(),
+			Username: username,
+			Email:    email,
+			Role:     "user",
+			Password: password,
+		})
+	}
+
+	db.Create(&account)
+}
+
+func generateUsername(name string) string {
+	// Buat username dari nama dengan mengganti spasi menjadi "_" dan menambahkan angka acak
+	rand.Seed(time.Now().UnixNano())
+	username := fmt.Sprintf("%s%d", util.Slugify(name), rand.Intn(1000))
+	return username
 }
 
 func Books() {
@@ -248,4 +284,32 @@ func BookGenres() (map[string]uuid.UUID, []models.Genre) {
 		})
 	}
 	return bookGenres, gen
+}
+
+func Borrow() {
+	// Ambil semua akun dan buku dari database
+	var accounts []models.Account
+	var books []models.Book
+	db.Find(&accounts)
+	db.Find(&books)
+
+	var borrows []models.Borrow
+	rand.Seed(time.Now().UnixNano())
+
+	for _, account := range accounts {
+		numBorrows := rand.Intn(3) + 1
+		for i := 0; i < numBorrows; i++ {
+			randomBook := books[rand.Intn(len(books))]
+			borrows = append(borrows, models.Borrow{
+				ID:        uuid.New(),
+				AccountID: account.ID,
+				BookID:    randomBook.ID,
+				IsSended:  rand.Intn(2) == 1,
+				CreatedAt: time.Now().AddDate(0, 0, -rand.Intn(120)),
+				UpdatedAt: time.Now(),
+			})
+		}
+	}
+
+	db.Create(&borrows)
 }

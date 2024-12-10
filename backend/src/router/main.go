@@ -88,6 +88,7 @@ func StartServer() error {
 	r.GET("/borrow/all", m.VerifiyJwtToken, handler.GetAllBorrows)
 	r.GET("/borrow/filter", m.VerifiyJwtToken, handler.FilterBorrowHistory)
 	r.GET("/borrow/getTopBooks", m.VerifiyJwtToken, handler.GetMostBorrowedBooks)
+	r.GET("/borrows/stats", handler.GetMonthlyBorrowStats)
 
 	r.POST("/upload", m.UploadFileM, handler.UploadImage)
 

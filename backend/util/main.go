@@ -1,9 +1,23 @@
 package util
 
 import (
+	"regexp"
+	"strings"
+
 	"github.com/gin-gonic/gin"
 	"golang.org/x/crypto/bcrypt"
 )
+
+func Slugify(input string) string {
+	// Convert to lowercase
+	slug := strings.ToLower(input)
+
+	// Replace spaces and special characters with hyphens
+	slug = regexp.MustCompile(`\s+`).ReplaceAllString(slug, "-")
+	slug = regexp.MustCompile(`[^\w-]+`).ReplaceAllString(slug, "")
+
+	return slug
+}
 
 func ResponseJson(c *gin.Context, status int, message string, data interface{}) {
 	c.JSON(status, gin.H{
