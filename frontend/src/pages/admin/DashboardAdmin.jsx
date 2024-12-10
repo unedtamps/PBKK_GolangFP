@@ -114,7 +114,7 @@ export default function DashboardAdmin() {
             <p className="text-2xl text-green-600">{allBooks.length}</p>
           </div>
           <div className="bg-white shadow-md p-4 rounded-lg text-center">
-            <h3 className="text-lg font-semibold">Total Borrow</h3>
+            <h3 className="text-lg font-semibold">Total Transaction</h3>
             <p className="text-2xl text-red-600">{allBorrows.length}</p>
           </div>
         </div>
@@ -122,7 +122,7 @@ export default function DashboardAdmin() {
         {/* Dua Kotak di Bawah */}
         <div className="grid grid-cols-2 gap-6">
           <div className="bg-white shadow-md px-6 pt-6 rounded-lg">
-            <h3 className="text-lg font-semibold text-center">My Library</h3>
+            <h3 className="text-lg font-semibold text-center">Transaction in a Months</h3>
             <Bar
               data={data}
               options={{

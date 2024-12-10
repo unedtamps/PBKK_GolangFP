@@ -58,7 +58,7 @@ const CardBook = ({ books, borrowBook, onDetailClick, setAllBooks }) => {
             <a className="hover:underline cursor-pointer" onClick={() => searchByAuthor(book.author.id, setAllBooks)} ><Text className="mt-2 italic">{book.author.name}</Text></a>
             <button
               className="w-full mt-4 bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400"
-              onClick={() => borrowBook(book)}
+              onClick={() => borrowBook(book.id)}
             >
               Borrow
             </button>

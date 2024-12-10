@@ -49,7 +49,7 @@ const CardBook = ({ books, borrowBook, onDetailClick }) => {
             </a>
             <button
               className="w-full mt-4 bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400"
-              onClick={() => borrowBook(book.id)}
+              onClick={() => borrowBook(book.book_id)}
             >
               Borrow
             </button>
@@ -203,7 +203,7 @@ export default function Home() {
 
       <div className="bg-gray-200 pl-64 ml-5 py-5">
         <div className="rounded-lg bg-white mx-3 mr-6 mt-3 mb-5 relative">
-          <h1 className="font-sans text-xl ml-5 mt-3 pt-3">Recommended</h1>
+          <h1 className="font-sans text-xl ml-5 mt-3 pt-3">Recommended Books</h1>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6 pb-5 my-3 mx-5">
             <CardBook

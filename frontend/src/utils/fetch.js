@@ -31,6 +31,7 @@ export const fetch = {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
       setAllBorrows(response.data.data || []);
+      console.log(response.data.data)
     } catch (error) {
       console.error("Failed to fetch all borrows", error);
       alert("Failed to fetch all borrows. Please try again later.");

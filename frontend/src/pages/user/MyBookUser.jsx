@@ -113,6 +113,7 @@ export default function MyBooks() {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
       setBorrowedBooks(response.data.data || []);
+      console.log(response.data.data)
     };
 
     fetchBorrowedBooks();

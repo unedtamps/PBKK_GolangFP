@@ -13,6 +13,6 @@ type Borrow struct {
 	BookID    uuid.UUID `gorm:"type:uuid;not null"                 json:"-"`
 	Book      Book      `gorm:"constraint:OnDelete:CASCADE"        json:"book"`
 	IsSended  bool      `gorm:"not null"                           json:"-"`
-	CreatedAt time.Time `gorm:"not null;default:CURRENT_TIMESTAMP" json:"-"`
+	CreatedAt time.Time `gorm:"not null;default:CURRENT_TIMESTAMP" json:"created_at"`
 	UpdatedAt time.Time `                                          json:"-"`
 }

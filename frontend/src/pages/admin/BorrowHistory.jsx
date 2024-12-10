@@ -23,6 +23,7 @@ export default function BorrowHistory() {
         params : { start_date: startDate, end_date: endDate },
       });
       setBorrowHistory(response.data.data);
+      console.log(response.data.data)
     } catch (error) {
       console.error("Error fetching borrow history:", error);
     }
@@ -90,7 +91,7 @@ export default function BorrowHistory() {
                     <Table.ColumnHeader color="white">Book</Table.ColumnHeader>
                     <Table.ColumnHeader color="white">Author</Table.ColumnHeader>
                     <Table.ColumnHeader color="white">Genre</Table.ColumnHeader>
-                    {/* <Table.ColumnHeader color="white">Date Borrowed</Table.ColumnHeader> */}
+                    <Table.ColumnHeader color="white">Date Borrowed</Table.ColumnHeader>
                 </Table.Row>
                 </Table.Header>
                 <Table.Body>
@@ -100,7 +101,13 @@ export default function BorrowHistory() {
                     <Table.Cell>{borrow.book.name}</Table.Cell>
                     <Table.Cell>{borrow.book.author.name}</Table.Cell>
                     <Table.Cell>{borrow.book.genre.name}</Table.Cell>
-                    {/* <Table.Cell>{borrow.created_at}</Table.Cell> */}
+                    <Table.Cell>
+                      {new Date(borrow.created_at).toLocaleDateString("en-US", {
+                        day: "numeric",
+                        month: "long",
+                        year: "numeric",
+                      })}
+                    </Table.Cell>
                     </Table.Row>
                 ))}
                 </Table.Body>
