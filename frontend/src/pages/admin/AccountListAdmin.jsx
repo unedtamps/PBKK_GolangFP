@@ -109,7 +109,9 @@ export default function AccountList() {
                 <Table.Row key={item.id}>
                   <Table.Cell>{item.username}</Table.Cell>
                   <Table.Cell>{item.email}</Table.Cell>
-                  <Table.Cell className="text-center"><Button onClick={() => DeleteAccount(item.id)} className="bg-red-500 rounded-lg p-1 text-white border border-black" size="sm">Delete</Button></Table.Cell>
+                  <Table.Cell className="text-center">
+                    <Button onClick={() => DeleteAccount(item.id)} className="bg-red-700 rounded-lg px-2" size="sm">Delete</Button>
+                  </Table.Cell>
                 </Table.Row>
               ))}
             </Table.Body>
