@@ -135,13 +135,6 @@ export default function DashboardAdmin() {
               }}
             />
           </div>
-          {/* <div className="bg-blue-600 shadow-md p-6 rounded-lg flex flex-col items-center">
-            <h3 className="text-lg font-semibold text-center mb-4">
-            </h3>
-            <div>              
-              
-            </div>
-          </div> */}
         </div>
       </div>
     </div>

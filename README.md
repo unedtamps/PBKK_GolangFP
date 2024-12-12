@@ -1,5 +1,7 @@
 # EAS PBKK D GOLANG
 
+[Link Video Youtube](https://youtu.be/ePNUtqkXK3I)
+
 ## Fitur - fitur yang di disediakan
 
 1. Fitur Autentikasi
